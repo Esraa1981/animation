@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <style type="text/css">
+
 body , html
 {
 	margin: 0  auto;
@@ -8,12 +9,13 @@ body , html
 	position: fixed;
 	cursor: url(basket.png), auto;
 }
-    
+   /*styling the div that contains the objects*/
 #space
 {
 	height:740px;
 	width:1450px;
 	position: relative;
+	overflow: hidden;
 
 }	
 #bird
@@ -39,82 +41,92 @@ body , html
 	bottom: 0;
 	position: absolute;
 }
-#start, #repeat
+/*styling the button*/
+#start
 {
 	font-size: 15px;
 	height: 40px;
 	width: 140px;
-}
-#repeat
-{
-	float:right ;
 }
 </style>
 <html>
 <head>
 	<title></title>
 </head>
-<body>
-<button  id="start" onclick="fly()">start</button>
-<div id="space">
-<img id="bird" src="bird.gif">
-<img id="egg" src="egg.png">
-<img id="basket" src="basket.png">
-</div>
-<p>
+	<body>
+	<button  id="start" onclick="fly()">start</button>
+	<!-- my objects are inside one div-->
+	<div id="space">
+		<img id="bird" src="bird.gif">
+		<img id="egg" src="egg.png">
+		<img id="basket" src="basket.png">
+	</div>
+	<p>
 
 
-<script type="text/javascript">
-var audio1 = new Audio('egg.wav');
-var audio = new Audio('duck.wav');
-function fly()
-{
-	audio.play();
-	var elem=document.getElementById("bird");//
-	var elem2=document.getElementById("basket");
-	var pos = -360;//
-	
-	var id = setInterval(frame,10);//
+	<script type="text/javascript">
+		var audio2 = new Audio('pop.wav');
+		var audio1 = new Audio('egg.mp3');
+		var audio = new Audio('duck.wav');
 
-	function frame()//
-	{
-		if(pos == 1560){
-			clearInterval(id);
-			alert("No more eggs!!!")
-		}
-		else {
-			pos++;
-			elem.style.left= pos+'px';
-			elem2.style.left= pos-100+'px';
-			if(pos%200==0)
-			{
-				lay(pos+300);
+		// main function 
+		function fly()
+		{
+			//play the bird sound
+			audio.play();
+			// pointer on the bird
+			var elem=document.getElementById("bird");
+			// pointer on the basket
+			var elem2=document.getElementById("basket");
+			//start from horizantal because I want to picture to come all from left
+			var pos = -360;//
+			
+			var id = setInterval(frame,10);//the speed on the egg to tranvel should be synced with the bird movement
+
+			function frame(){
+			//when the bird completly disappear on the right side
+				if(pos == 1560){
+					clearInterval(id);
+					alert("No more eggs!!!")
+				}
+				else {//move the bird and the basket 
+					pos++;
+					elem.style.left= pos+'px';
+					elem2.style.left= pos-100+'px';//the basket moves after the bird to give time to the egg to travel down
+					//how frequent the bird will lay egg. with pop sound
+					if(pos%200==0){
+						lay(pos+300);
+						audio2.play();
+					}
+				}
 			}
 		}
-	}
-}
-function lay(m)
-{
-	var elem=document.getElementById("egg");//
-	var i=150;
-	var pos = m-140;//
-	elem.style.top= i+'px';
-	elem.style.left= pos+"px";
-	elem.style.display= "block";
-	var id = setInterval(frame,.0001);//
-	
-	function frame()//
-	{
-		if(i == 600){
-			clearInterval(id);
-			audio1.play();
+		function lay(m)
+		{
+			//pointer on the egg
+			var elem=document.getElementById("egg");//
+			// to make the egg appears in the bird position
+			var i=150;
+			var pos = m-140;//
+			elem.style.top= i+'px';//to make the egg come from the bird bac
+			elem.style.left= pos+"px";
+			elem.style.display= "block";//to make the egg appear
+			var id = setInterval(frame,.0001);//
+			
+			function frame()//
+			{
+				if(i == 600){
+					//when the egg reaches the floor play crack sound
+					clearInterval(id);
+					audio1.play();
+				}
+				else {
+					i++;
+					//continue moving down
+					elem.style.top= i+'px';
+				}
+			}
 		}
-		else {
-			i++;
-			elem.style.top= i+'px';
-		}
-	}
-}
-</script>
+	</script>
 </body>
 </html>
